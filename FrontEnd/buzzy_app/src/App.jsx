@@ -1,15 +1,21 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
-
+import Navbar from '../src/components/Navbar'
+import {Routes, Route} from 'react-router-dom'
+import HomePage from '../src/pages/HomePage'
+import SignupPage from '../src/pages/SignupPage'
+import LoginPage from '../src/pages/LoginPage'
+import SettingsPage from '../src/pages/SettingsPage'
+import ProfilePage from '../src/pages/ProfilePage'
 function App() {
     return (
-        <div className="min-h-screen flex items-center justify-center bg-base-200">
-            <button className="btn btn-primary">
-                Buzzy
-            </button>
+        <div>
+            <Navbar/>
+            <Routes>
+                <Route path="/" element={<HomePage/>} />
+                <Route path="/signup" element={<SignupPage/>} />
+                <Route path="/login" element={<LoginPage/>} />
+                <Route path="/settings" element={<SettingsPage/>} />
+                <Route path="/profile" element={<ProfilePage/>} />
+            </Routes>
         </div>
     );
 }

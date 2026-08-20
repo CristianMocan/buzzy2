@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import { EyeOff,Eye, Mail, MessageSquare, User, Lock, Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
+import AuthImagePattern from "../components/AuthImagePattern";
 
 const SignupPage = () =>{
     const [showPassword, setShowPassword] = useState(false)
@@ -15,7 +16,7 @@ const SignupPage = () =>{
     const handleSubmit = (e) => {
         e.preventDefault();
     }
-    return <div className="min-h-screen grid lg:grid-cols-2">
+    return <div className="min-h-screen grid lg:grid-cols-2 bg-primary/10">
         {/*Left side*/}
         <div className="flex flex-col justify-center items-center p-6 sm:p-12">
             <div className="w-full max-w-md space-y-8">
@@ -113,7 +114,10 @@ const SignupPage = () =>{
             </div>
         </div>
         {/*right side*/}
-        
+        <AuthImagePattern 
+            title="Welcome to Buzzy"
+            subtitle="Connect, share, and explore with Buzzy - your ultimate social media platform."
+        />
     </div>
 }
 

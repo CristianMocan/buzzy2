@@ -9,10 +9,12 @@ import SettingsPage from '../src/pages/SettingsPage'
 import ProfilePage from '../src/pages/ProfilePage'
 // import { axiosInstance } from './lib/axios'
 import { useAuthStore } from './store/useAuthStore'
+import { useThemeStore } from './store/useThemeStore'
 import { useEffect } from 'react'
 import {Toaster} from 'react-hot-toast'
 function App() {
     const {authUser, checkAuth, isCheckingAuth} = useAuthStore()
+    const {theme} = useThemeStore()
     useEffect(() => {
         checkAuth()
     }, [checkAuth])
@@ -23,7 +25,7 @@ function App() {
         </div>
     )
     return (
-        <div>
+        <div data-theme={theme}>
             <Navbar/>
             <Routes>
                 <Route path="/" element={authUser ? <HomePage/> : <Navigate to="/login"/>} />

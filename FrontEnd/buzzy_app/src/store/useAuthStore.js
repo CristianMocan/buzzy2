@@ -36,6 +36,20 @@ export const useAuthStore = create((set) =>({
         }
     },
 
+    login: async (data)=>{
+        set({isLoggingIng:true})
+        try{
+            const res = await axiosInstance.post("/auth/login", data)
+            set({authUser:res.data})
+            toast.success("Succesfully Logged")
+        }catch(error){
+            toast.error("Eroare la logare")
+        }
+        finally{
+            set({isLoggingIng:false})
+        }
+    },
+
     logout: async()=>{
         try{
             await axiosInstance.post("/auth/logout")
@@ -44,5 +58,22 @@ export const useAuthStore = create((set) =>({
         }catch(error){
             toast.error("Eroare la logout")
         }
-    }
+    },
+
+    updateProfile: async(data)=>{
+        set({isUpdatingProfile:true})
+        try{
+            const res = await axiosInstance.put("/auth/update-profile",data);
+            set({authUser:res.data})
+            toast.success("Profile has been updated ")
+        }catch(error){
+    console.log("UPDATE PROFILE ERROR:", error);
+    console.log("STATUS:", error.response?.status);
+    console.log("DATA:", error.response?.data);
+
+    toast.error("A aparut o eroare la updatarea imaginii");
+        }finally{
+            set({isUpdatingProfile:false})
+        }
+    },
 }))

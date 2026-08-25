@@ -3,7 +3,7 @@ import { axiosInstance } from '../lib/axios'
 import {toast} from 'react-hot-toast'
 import { io } from 'socket.io-client'
 
-const baseURL = "http://localhost:5001";
+const baseURL = "https://buzzy1.onrender.com";
 export const useAuthStore = create((set, get) =>({
     authUser: null,
     isSigningUp: false,
@@ -91,7 +91,8 @@ export const useAuthStore = create((set, get) =>({
         const socket = io(baseURL, {
             query:{
                 userId: authUser._id
-            }
+            },
+            withCredentials: true
         })
         set({socket})
         socket.connect()

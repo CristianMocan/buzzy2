@@ -1,6 +1,7 @@
 import {create} from 'zustand';
 import toast from 'react-hot-toast'
 import { axiosInstance } from '../lib/axios';
+import { useAuthStore } from './useAuthStore';
 
 export const useChatStore = create((set, get) => ({
     messages:[],
@@ -34,16 +35,52 @@ export const useChatStore = create((set, get) => ({
         }
     },
 
-    sendMessage: async(messageData) => {
-        const {selectedUser, messages} = get()
-        try{
-            const res = await axiosInstance.post(`/messages/send/${selectedUser._id}`, messageData)
-            set({
+    sendMessage: async (messageData) => {
+    const { selectedUser, messages } = get();
+
+    try {
+        const res = await axiosInstance.post(
+            `/messages/send/${selectedUser._id}`,
+            messageData
+        );
+
+        set({
             messages: [...messages, res.data]
         });
-        }catch(error){
-            toast.error("Eroare la trimiterea mesajului")
-        }
+
+    } catch (error) {
+        toast.error("Eroare la trimiterea mesajului");
+    }
+},
+
+    subscribeToMessages: () => {
+    const { selectedUser } = get();
+
+    if (!selectedUser) return;
+
+    const socket = useAuthStore.getState().socket;
+
+    socket.off("newMessage");
+
+    socket.on("newMessage", (newMessage) => {
+        if(newMessage.senderId !== selectedUser._id) return;
+        const { messages } = get();
+
+        const alreadyExists = messages.some(
+            (message) => message._id === newMessage._id
+        );
+
+        if (alreadyExists) return;
+
+        set({
+            messages: [...messages, newMessage]
+        });
+    });
+},
+
+    unsubscribeToMessages: () =>{
+        const socket = useAuthStore.getState().socket;
+        socket.off("newMessages");
     },
 
     setSelectedUser: (selectedUser) => set({selectedUser}),

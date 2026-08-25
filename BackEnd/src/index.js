@@ -8,10 +8,27 @@ import { app, server } from './lib/socket.js'
 import { connectDB } from './lib/db.js'
 dotenv.config()
 
-app.use(cors({
-    origin: "https://buzzy1-fawn.vercel.app",
-    credentials: true,
-}))
+const allowedOrigins = [
+    "http://localhost:5173",
+    "https://buzzy1-fawn.vercel.app"
+];
+
+const corsOptions = {
+    origin: (origin, callback) => {
+        if (
+            !origin ||
+            allowedOrigins.includes(origin) ||
+            origin.endsWith(".vercel.app")
+        ) {
+            callback(null, true);
+        } else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
+    credentials: true
+};
+
+app.use(cors(corsOptions));
 app.use(express.json({ limit: "10mb" }))
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser())

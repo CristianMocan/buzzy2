@@ -1,34 +1,51 @@
-import {Server} from 'socket.io'
-import http from 'http'
-import express from 'express'
+import { Server } from "socket.io";
+import http from "http";
+import express from "express";
 
 const app = express();
-const server = http.createServer(app)
+const server = http.createServer(app);
+
 const io = new Server(server, {
-    cors:{
-        origin: ["https://buzzy1-peb2uceiq-nati-b2b2.vercel.app"],
+    cors: {
+        origin: (origin, callback) => {
+            if (
+                !origin ||
+                origin === "http://localhost:5173" ||
+                origin.endsWith(".vercel.app")
+            ) {
+                callback(null, true);
+            } else {
+                callback(new Error("Not allowed by CORS"));
+            }
+        },
         credentials: true
     }
-})
+});
 
 export function getReceiverSocketId(userId) {
-    return userSocketMap[userId]
+    return userSocketMap[userId];
 }
 
-const userSocketMap = {}; //{user.Id: socketId}
+const userSocketMap = {};
 
-io.on("connection", (socket) =>{
-    console.log("A user connected", socket.id)
-    const userId = socket.handshake.query.userId
-    if(userId){
-        userSocketMap[userId] = socket.id
+io.on("connection", (socket) => {
+    console.log("A user connected", socket.id);
+
+    const userId = socket.handshake.query.userId;
+
+    if (userId) {
+        userSocketMap[userId] = socket.id;
     }
-    io.emit("getOnlineUsers", Object.keys(userSocketMap))
-    socket.on("disconnect", () =>{
-        console.log("A user disconnected", socket.id);
-        delete userSocketMap[userId]
-        io.emit("getOnlineUsers", Object.keys(userSocketMap))
-    })
-})
 
-export {io, app, server}
+    io.emit("getOnlineUsers", Object.keys(userSocketMap));
+
+    socket.on("disconnect", () => {
+        console.log("A user disconnected", socket.id);
+
+        delete userSocketMap[userId];
+
+        io.emit("getOnlineUsers", Object.keys(userSocketMap));
+    });
+});
+
+export { io, app, server };

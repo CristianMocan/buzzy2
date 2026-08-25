@@ -6,7 +6,7 @@ const app = express();
 const server = http.createServer(app)
 const io = new Server(server, {
     cors:{
-        origin: ["https://buzzy1-fawn.vercel.app"],
+        origin: ["https://buzzy1-peb2uceiq-nati-b2b2.vercel.app"],
         credentials: true
     }
 })

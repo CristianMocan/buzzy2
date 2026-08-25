@@ -9,7 +9,7 @@ import { connectDB } from './lib/db.js'
 dotenv.config()
 
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: "https://buzzy1-fawn.vercel.app",
     credentials: true,
 }))
 app.use(express.json({ limit: "10mb" }))

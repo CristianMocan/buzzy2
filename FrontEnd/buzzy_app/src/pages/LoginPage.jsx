@@ -139,10 +139,10 @@ const LoginPage = () => {
                     <div className="text-center">
                         <p className="text-base-content/60">
                             <Link
-                                to="/"
+                                to="/signup"
                                 className="link link-primary"
                             >
-                                Forgot your password?
+                                Don't have an account? Create a new account
                             </Link>
                         </p>
                     </div>
